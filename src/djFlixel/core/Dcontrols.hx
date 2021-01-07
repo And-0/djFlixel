@@ -131,7 +131,21 @@ class Dcontrols
 			MAP_KEYS[i] = [KEYS[i]];
 		}
 		generateSpecialKeys();
-	}//---------------------------------------------------;
+    }//---------------------------------------------------;
+    
+	/** Replace all keys with these new ones */
+	public function keymap_set_multiple(KEYS:Array<Array<Int>>) {
+        trace("Before: "+MAP_KEYS);
+		for (i in 0...MAP_KEYS.length) {
+			if (i >= KEYS.length)
+				MAP_KEYS[i] = []; //continue;//MAP_KEYS[i] = MAP_KEYS_DEFAULT[i];
+			else
+				MAP_KEYS[i] = KEYS[i];
+        }
+		trace("After: " + MAP_KEYS);
+        
+		generateSpecialKeys();
+	} //---------------------------------------------------;
 	
 	/**
 	   Flush all the button presses
@@ -409,7 +423,7 @@ class Dcontrols
 			MAP_KEYS[cast B].concat(
 			MAP_KEYS[cast X].concat(
 			MAP_KEYS[cast Y])))));
-			
+			trace("DONE WITH SPECIAL");
 	}//---------------------------------------------------;
 
 }// -- end --//

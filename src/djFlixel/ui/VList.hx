@@ -30,7 +30,9 @@ import openfl.display.BitmapData;
 typedef VListStyle = {
 
 	// How many pixels to the right to animate the highlighted element at (scroll_time) speed
-	focus_nudge:Int,
+    focus_nudge:Int,
+    // Should items be nudged back and forth?
+    pingpong:Bool,
 	// Loop at edges
 	loop:Bool,
 	// Start scrolling the view before reaching the edges by this much.
@@ -100,7 +102,8 @@ class VList<T:IListItem<K> & FlxSprite, K> extends FlxSpriteGroup
 		align:"left",
 		loop:false,
 		item_pad:-2,				// You can use negative values here
-		focus_nudge:4,				// Push elements 4 pixels when they are focused
+		focus_nudge: 4, // Push elements 4 pixels when they are focused
+		pingpong: false,
 		scroll_pad:1,				// Initiate scroll when cursor is at an offset from the edge.
 		scroll_time:0.125,
 		
@@ -866,9 +869,11 @@ class VList<T:IListItem<K> & FlxSprite, K> extends FlxSpriteGroup
 			if (tween_map.exists(indexItem)) { // Cancel any previous tween
 				tween_map.get(indexItem).cancel();
 				// Note : do not remove it will be replaced below
-			}
+            }
+            var tweenProperties:TweenOptions = style.pingpong ? { type: PINGPONG } : { ease: FlxEase.cubeOut }
+            var pingPongOffset = style.pingpong ? 0 : 0;
 			tween_map.set(indexItem, FlxTween.tween( indexItem, 
-				{ x:x + get_itemStartX(indexItem) + style.focus_nudge }, style.scroll_time, { ease:FlxEase.cubeOut } ));
+				{ x:x + get_itemStartX(indexItem) + style.focus_nudge + pingPongOffset }, style.scroll_time, tweenProperties ));
 		}		
 		cursor_updatePos();
 	}//---------------------------------------------------;	
@@ -904,8 +909,9 @@ class VList<T:IListItem<K> & FlxSprite, K> extends FlxSpriteGroup
 		
 		var offs:Array<Int>; // [Start-End] offsets
 		
-		// --
-		var zeroline:Float = x + get_itemStartX(indexItem) - cursor.width;
+        // --
+        var pingpongOffset:Float = style.pingpong ? cursor.width : 0;
+		var zeroline:Float = x + get_itemStartX(indexItem) - cursor.width - pingpongOffset;
 		cursor.y = indexItem.y;
 		cursor.alpha = CURSOR_START_ALPHA;
 		if (tween_map.exists(cursor)) {
