@@ -152,6 +152,12 @@ class Dcontrols {
 		generateSpecialKeys();
 	} //---------------------------------------------------;
 
+	public function set_all_maps(KeyboardKEYS:Array<Array<Int>>, JoypadKEYS:Array<Array<Int>>) {
+		keymap_set_multiple(KeyboardKEYS);
+		padmap_set_multiple(JoypadKEYS);
+		gamepad_poll();
+	}
+
 	/**
 		Flush all the button presses
 		Useful sometimes in menus when you switch from 
@@ -230,6 +236,7 @@ class Dcontrols {
 			t_gpol = 0;
 			if (gamepad_check()) {
 				map_controls();
+				trace("Got a Gamepad!");
 				return true;
 			}
 		}
@@ -284,8 +291,6 @@ class Dcontrols {
 
 	// --
 	function _padPressed(id:DButton):Bool {
-		return gamepad.anyPressed(PAD_KEYS[cast id]);
-		// return gamepad.pressed.check(PAD_KEYS[cast id]);
 		return switch (id) {
 			case UP: gp.DPAD_UP || gamepad.analog.value.LEFT_STICK_Y < 0;
 			case DOWN: gp.DPAD_DOWN || gamepad.analog.value.LEFT_STICK_Y > 0;
@@ -308,7 +313,6 @@ class Dcontrols {
 	// --
 	// WARN: On analog input, returns the state!
 	function _padJustPressed(id:DButton):Bool {
-		return gamepad.anyJustPressed(PAD_KEYS[cast id]);
 		return switch (id) {
 			case UP: gjp.DPAD_UP || (gamepad.analog.justMoved.LEFT_STICK_Y && gamepad.analog.value.LEFT_STICK_Y < 0);
 			case DOWN: gjp.DPAD_DOWN || (gamepad.analog.justMoved.LEFT_STICK_Y && gamepad.analog.value.LEFT_STICK_Y > 0);
