@@ -111,6 +111,7 @@ class FlxMenu extends FlxGroup {
 	public var PARAMS = {
 		enable_mouse: true, // Enable mouse interaction in general
 		start_button_fire: false, // True will make the start button fire to items
+		fire_simple: false,
 		page_anim_parallel: false, // Page-on-off will run in parallel instead of waiting
 		// --
 		header_enable: true, // Show an animated text title for each menu page
@@ -540,6 +541,7 @@ class FlxMenu extends FlxGroup {
 		p.cameras = [camera];
 		p.FLAGS.enable_mouse = PARAMS.enable_mouse;
 		p.FLAGS.start_button_fire = PARAMS.start_button_fire;
+		p.FLAGS.fire_simple = PARAMS.fire_simple;
 		p.styleC = stC;
 		p.styleIt = DataT.copyDeep(stI);
 		p.style = Reflect.copy(stL);

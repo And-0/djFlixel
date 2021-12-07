@@ -20,6 +20,7 @@ import flixel.tweens.FlxTween;
 import flixel.tweens.misc.VarTween;
 import flixel.util.FlxDestroyUtil;
 import flixel.util.typeLimit.OneOfTwo;
+import helpers.DRJ;
 import openfl.display.BitmapData;
 
 typedef VListStyle = {
@@ -537,7 +538,6 @@ class VList<T:IListItem<K> & FlxSprite, K> extends FlxSpriteGroup {
 
 	function processInput() {
 		if (D.ctrl.timePress(UP)) { // UP
-			trace("INPUT UP AND STUFF");
 			if (inputMode == 2) {
 				selectionUp1();
 			} else {
@@ -557,6 +557,7 @@ class VList<T:IListItem<K> & FlxSprite, K> extends FlxSpriteGroup {
 			if (D.ctrl.timePress(LEFT, 0.7, 0.08, 0.02)) {
 				indexItem.onInput(left);
 			} else if (D.ctrl.timePress(RIGHT, 0.7, 0.08, 0.02)) {
+				trace('Right! ${DRJ.getClassName(indexItem)}');
 				indexItem.onInput(right);
 			} else if (D.ctrl.justPressed(A)) {
 				if (FLAGS.fire_simple)
